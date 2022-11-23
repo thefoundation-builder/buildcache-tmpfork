@@ -6,6 +6,11 @@ env:
   REGISTRY_DOCKER: index.docker.io
   GH_IMAGE_NAME: ${{ github.repository }}
   PLATFORMS: "linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8"
+# permissions are needed if pushing to ghcr.io
+permissions:
+  packages: write
+
+
 
 on:
   push:
@@ -21,15 +26,6 @@ on:
     branches:
       - 'dev'
       - 'testing'
-
-# permissions are needed if pushing to ghcr.io
-permissions:
-  packages: write
-
-env:
-  REGISTRY_GITHUB: ghcr.io
-  REGISTRY_DOCKER: index.docker.io
-  GH_IMAGE_NAME: ${{ github.repository }}
 
 
 jobs:
