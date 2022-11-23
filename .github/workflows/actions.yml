@@ -1,5 +1,12 @@
 name: Build
 
+
+env:
+  REGISTRY_GITHUB: ghcr.io
+  REGISTRY_DOCKER: index.docker.io
+  GH_IMAGE_NAME: ${{ github.repository }}
+  PLATFORMS: "linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8"
+
 on:
   push:
     branches:
