@@ -72,7 +72,8 @@ jobs:
       contents: read
     if: github.repository_owner == 'thefoundation-builder'
     steps:
-      - uses: actions/checkout@v3
+#      - uses: actions/checkout@v3
+## SCRATCH IMAGE
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
