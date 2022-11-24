@@ -4,8 +4,8 @@ name: Build
 env:
   REGISTRY_GITHUB: ghcr.io
   REGISTRY_DOCKER: index.docker.io
-  GH_IMAGE_NAME: ${{ github.repository }}
-  CI_REGISTRY_IMAGE: ${{ github.repository }}
+  GH_IMAGE_NAME: ghcr.io/${{ github.repository }}
+  CI_REGISTRY_IMAGE: ghcr.io/${{ github.repository }}
   PLATFORMS: "linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8"
 # permissions are needed if pushing to ghcr.io
 permissions:
