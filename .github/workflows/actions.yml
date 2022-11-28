@@ -5,14 +5,14 @@ env:
   REGISTRY_GITHUB: ghcr.io
   REGISTRY_DOCKER: index.docker.io
   GH_IMAGE_NAME: ghcr.io/${{ github.repository }}
+  DH_IMAGE_NAME: index.docker.io/thefoundation/multiarch-images
+  GL_IMAGE_NAME: registry.gitlab.io/thefoundation/multiarch-images
   CI_REGISTRY_IMAGE: ghcr.io/${{ github.repository }}
   BUILDCACHE: ghcr.io/${{ github.repository_owner }}/buildcache
   PLATFORMS: "linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8"
 # permissions are needed if pushing to ghcr.io
 permissions:
   packages: write
-
-
 
 on:
   push:
@@ -28,7 +28,6 @@ on:
     branches:
       - 'dev'
       - 'testing'
-
 
 jobs:
   # Push image to GitHub Packages.
@@ -84,11 +83,11 @@ jobs:
         run: echo ${{ steps.buildx.outputs.platforms }}
       - name: current images
         run: docker image ls
-#      - name: Login to Docker Hub
-#        uses: docker/login-action@v2
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -98,7 +97,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: build images
 #        run: sudo /bin/bash -c "export REGISTRY_PASSWORD=$REGISTRY_PASSWORD;export REGISTRY_HOST=docker.io;export REGISTRY_PROJECT=thefoundation;export PROJECT_NAME=hocker;export REGISTRY_USER=${{ secrets.REGISTRY_USER }} ;bash _build_hocker.sh base-focal "
-        run: ((echo FROM alpine;echo RUN apk add --no-cache bash procps ) > /tmp/Dfile ) && 	docker buildx build --platform ${PLATFORMS}  --pull --cache-to=type=registry,ref=$BUILDCACHE:zzz_buildcache_scratch --cache-from=type=registry,ref=$BUILDCACHE:zzz_buildcache_scratch -t $CI_REGISTRY_IMAGE:scratch --push  -f /tmp/Dfile .
+        run: ((echo FROM alpine;echo RUN apk add --no-cache bash procps ) > /tmp/Dfile ) && 	docker buildx build --platform ${PLATFORMS}  --pull --cache-to=type=registry,ref=$BUILDCACHE:zzz_buildcache_scratch --cache-from=type=registry,ref=$BUILDCACHE:zzz_buildcache_scratch -t DH_IMAGE_NAME:base-alpine --push  -f /tmp/Dfile .
       - name: show files
 #        run: bash -c "ls buildlogs/  -lh1 ; tail -n 20 buildlogs/*"
         run: docker image ls 
